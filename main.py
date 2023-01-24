@@ -1,7 +1,6 @@
 # coding=utf-8
-import hashlib
 import datetime as date
-import random
+import hashlib
 
 
 class Block:
@@ -9,17 +8,18 @@ class Block:
         self.index = index
         self.timestamp = timestamp
         self.data = data
-        self.previous_hash = previous_hash.encode('utf-8')
+        self.previous_hash = previous_hash.encode("utf-8")
         self.hash = self.hash_block()
 
     def hash_block(self):
         sha = hashlib.sha3_512()
 
         sha.update(
-            str(self.index).encode('utf-8') +
-            str(self.timestamp).encode('utf-8') +
-            str(self.data).encode('utf-8') +
-            str(self.previous_hash).encode('utf-8'))
+            str(self.index).encode("utf-8")
+            + str(self.timestamp).encode("utf-8")
+            + str(self.data).encode("utf-8")
+            + str(self.previous_hash).encode("utf-8")
+        )
 
         return sha.hexdigest()
 
@@ -37,14 +37,18 @@ def next_block(last_block):
     return Block(this_index, this_timestamp, this_data, this_hash)
 
 
-blockchain = [create_genesis_block()]
-previous_block = blockchain[0]
-num_of_blocks_to_add = 2000000000
+def main():
+    blockchain = [create_genesis_block()]
+    previous_block = blockchain[0]
+    num_of_blocks_to_add = 10
 
-for i in range(0, num_of_blocks_to_add):
-    block_to_add = next_block(previous_block)
-    blockchain.append(block_to_add)
-    previous_block = block_to_add
-    print("Block #{} has been added to the blockchain!".format(
-        block_to_add.index))
-    print("Hash: {}".format(block_to_add.hash))
+    for _ in range(0, num_of_blocks_to_add):
+        block_to_add = next_block(previous_block)
+        blockchain.append(block_to_add)
+        previous_block = block_to_add
+        print("Block #{} has been added to the blockchain!".format(block_to_add.index))
+        print("Hash: {}".format(block_to_add.hash))
+
+
+if __name__ == "__main__":
+    main()
